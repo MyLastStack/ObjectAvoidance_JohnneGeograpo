@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Hunter
   - Prey
+  - Wall
   layers:
   - Default
   - TransparentFX

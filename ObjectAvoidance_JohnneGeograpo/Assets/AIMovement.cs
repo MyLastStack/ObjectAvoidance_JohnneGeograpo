@@ -1,12 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class AIMovement : MonoBehaviour
 {
+    [SerializeField] float forwardDist = 1.0f, sideDist = 3.0f;
+
     [SerializeField] List<GameObject> hunters;
     [SerializeField] List<GameObject> powerups;
     [SerializeField] List<GameObject> collectible;
+
+    bool isLeft, isRight;
+    RaycastHit hit;
 
     Vector3 finalVector;
     float moveSpeed = 2f;
@@ -45,7 +51,10 @@ public class AIMovement : MonoBehaviour
     #region OnCollision
     private void OnCollisionEnter(Collision collision)
     {
-        
+        if (collision.gameObject.tag == "Hunter")
+        {
+            gameObject.SetActive(false);
+        }
     }
     #endregion
 
@@ -96,6 +105,46 @@ public class AIMovement : MonoBehaviour
         }
     }
     #endregion
+
+    void AvoidWalls()
+    {
+        if (Physics.BoxCast(transform.position, new Vector3(0.5f, 0.5f, 0.5f), transform.forward, out hit, Quaternion.identity, forwardDist))
+        {
+            if (hit.transform.gameObject.tag == "Wall")
+            {
+
+                // Rotate based on what is to the sides
+                isLeft = Physics.Raycast(transform.position, -transform.right, sideDist);
+                isRight = Physics.Raycast(transform.position, transform.right, sideDist);
+
+                transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(transform.forward, -hit.normal, 1, 1));
+
+                if (isLeft && isRight)
+                {
+                    transform.Rotate(Vector3.up, 180);
+                }
+                else if (isLeft && !isRight)
+                {
+                    transform.Rotate(Vector3.up, 90);
+                }
+                else if (!isLeft && isRight)
+                {
+                    transform.Rotate(Vector3.up, -90);
+                }
+                else
+                {
+                    if (Random.Range(1, 3) == 1)
+                    {
+                        transform.Rotate(Vector3.up, 90);
+                    }
+                    else
+                    {
+                        transform.Rotate(Vector3.up, -90);
+                    }
+                }
+            }
+        }
+    }
 
     Vector3 CalculateCombinedThreatVector()
     {
