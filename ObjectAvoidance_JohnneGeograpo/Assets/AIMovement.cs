@@ -6,6 +6,7 @@ public class AIMovement : MonoBehaviour
 {
     [SerializeField] List<GameObject> hunters;
     [SerializeField] List<GameObject> powerups;
+    [SerializeField] List<GameObject> collectible;
 
     Vector3 finalVector;
     float moveSpeed = 2f;
@@ -31,13 +32,24 @@ public class AIMovement : MonoBehaviour
         {
             Vector3 combinedThreatVector = CalculateCombinedThreatVector();
 
-            Quaternion targetRotation = Quaternion.LookRotation(-combinedThreatVector, transform.up);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * rotateSpeed);
+            if (hunters.Count != 0)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(combinedThreatVector, transform.up);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * rotateSpeed);
+            }
 
             transform.Translate(Vector3.forward * Time.deltaTime * moveSpeed);
         }
     }
 
+    #region OnCollision
+    private void OnCollisionEnter(Collision collision)
+    {
+        
+    }
+    #endregion
+
+    #region OnTrigger
     private void OnTriggerEnter(Collider other)
     {
         Rigidbody rb = other.GetComponent<Rigidbody>();
@@ -83,6 +95,7 @@ public class AIMovement : MonoBehaviour
             }
         }
     }
+    #endregion
 
     Vector3 CalculateCombinedThreatVector()
     {
@@ -99,33 +112,33 @@ public class AIMovement : MonoBehaviour
 
     Vector3 CalculateAttractionVector()
     {
-        GameObject nearestCollectible = GetNearestCollectible();
+        GameObject nearestPU = GetNearestPU();
 
-        if (nearestCollectible != null)
+        if (nearestPU != null)
         {
-            Vector3 attractionVector = nearestCollectible.transform.position - transform.position;
+            Vector3 attractionVector = nearestPU.transform.position - transform.position;
             return attractionVector.normalized;
         }
 
         return Vector3.zero;
     }
 
-    GameObject GetNearestCollectible()
+    GameObject GetNearestPU()
     {
-        GameObject nearestCollectible = null;
+        GameObject nearestPU = null;
         float nearestDistance = float.MaxValue;
 
-        foreach (GameObject collectible in powerups)
+        foreach (GameObject powerup in powerups)
         {
-            float distance = Vector3.Distance(transform.position, collectible.transform.position);
+            float distance = Vector3.Distance(transform.position, powerup.transform.position);
 
             if (distance < nearestDistance)
             {
                 nearestDistance = distance;
-                nearestCollectible = collectible;
+                nearestPU = powerup;
             }
         }
 
-        return nearestCollectible;
+        return nearestPU;
     }
 }
