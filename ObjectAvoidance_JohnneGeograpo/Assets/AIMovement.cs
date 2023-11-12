@@ -85,6 +85,19 @@ public class AIMovement : MonoBehaviour
         transform.Translate(-escapeVector * Time.deltaTime * moveSpeed, Space.World);
     }
 
+    Vector3 CalculateAttractionVector()
+    {
+        GameObject nearestCollectible = GetNearestCollectible();
+
+        if (nearestCollectible != null)
+        {
+            Vector3 attractionVector = nearestCollectible.transform.position - transform.position;
+            return attractionVector.normalized;
+        }
+
+        return Vector3.zero;
+    }
+
     GameObject GetNearestCollectible()
     {
         GameObject nearestCollectible = null;
