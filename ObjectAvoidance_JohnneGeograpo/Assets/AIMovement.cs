@@ -34,7 +34,7 @@ public class AIMovement : MonoBehaviour
             Quaternion targetRotation = Quaternion.LookRotation(-combinedThreatVector, transform.up);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * rotateSpeed);
 
-            transform.Translate(-combinedThreatVector.normalized * Time.deltaTime * moveSpeed, Space.World);
+            transform.Translate(Vector3.forward * Time.deltaTime * moveSpeed);
         }
     }
 
