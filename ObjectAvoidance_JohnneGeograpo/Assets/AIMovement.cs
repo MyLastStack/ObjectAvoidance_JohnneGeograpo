@@ -27,6 +27,8 @@ public class AIMovement : MonoBehaviour
     {
         Vector3 attractionVector = CalculateAttractionVector();
 
+        AvoidWalls();
+
         if (attractionVector != Vector3.zero)
         {
             Quaternion targetRotation = Quaternion.LookRotation(attractionVector, transform.up);
