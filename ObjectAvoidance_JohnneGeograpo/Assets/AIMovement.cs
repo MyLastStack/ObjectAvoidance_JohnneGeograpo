@@ -86,7 +86,6 @@ public class AIMovement : MonoBehaviour
 
     Vector3 CalculateCombinedThreatVector()
     {
-        // Calculate combined threat vector
         Vector3 combinedThreatVector = Vector3.zero;
 
         foreach (GameObject hunter in hunters)
@@ -100,23 +99,19 @@ public class AIMovement : MonoBehaviour
 
     Vector3 CalculateAttractionVector()
     {
-        // Find the nearest collectible
         GameObject nearestCollectible = GetNearestCollectible();
 
-        // Calculate attraction vector towards the nearest collectible
         if (nearestCollectible != null)
         {
             Vector3 attractionVector = nearestCollectible.transform.position - transform.position;
             return attractionVector.normalized;
         }
 
-        // If no collectible is found, return zero vector
         return Vector3.zero;
     }
 
     GameObject GetNearestCollectible()
     {
-        // Find the nearest collectible
         GameObject nearestCollectible = null;
         float nearestDistance = float.MaxValue;
 
