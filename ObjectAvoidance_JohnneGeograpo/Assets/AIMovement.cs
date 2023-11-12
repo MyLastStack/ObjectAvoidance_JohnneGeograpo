@@ -7,7 +7,7 @@ public class AIMovement : MonoBehaviour
     [SerializeField] List<GameObject> hunters;
     [SerializeField] List<GameObject> powerups;
 
-    public Vector3 avoidAngle;
+    Vector3 finalVector;
     float moveSpeed = 2f;
     float rotateSpeed = 1000f;
 
@@ -18,7 +18,24 @@ public class AIMovement : MonoBehaviour
 
     void Update()
     {
-        AngleFinder();
+        Vector3 attractionVector = CalculateAttractionVector();
+
+        if (attractionVector != Vector3.zero)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(attractionVector, transform.up);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * rotateSpeed);
+
+            transform.Translate(attractionVector.normalized * Time.deltaTime * moveSpeed, Space.World);
+        }
+        else
+        {
+            Vector3 combinedThreatVector = CalculateCombinedThreatVector();
+
+            Quaternion targetRotation = Quaternion.LookRotation(-combinedThreatVector, transform.up);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * rotateSpeed);
+
+            transform.Translate(-combinedThreatVector.normalized * Time.deltaTime * moveSpeed, Space.World);
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -67,39 +84,39 @@ public class AIMovement : MonoBehaviour
         }
     }
 
-    void AngleFinder()
+    Vector3 CalculateCombinedThreatVector()
     {
+        // Calculate combined threat vector
         Vector3 combinedThreatVector = Vector3.zero;
 
-        foreach (var hunter in hunters)
+        foreach (GameObject hunter in hunters)
         {
             Vector3 threatVector = transform.position - hunter.transform.position;
             combinedThreatVector += threatVector.normalized;
         }
 
-        Vector3 escapeVector = -combinedThreatVector.normalized;
-
-        Quaternion targetRotation = Quaternion.LookRotation(escapeVector, transform.up);
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * rotateSpeed);
-
-        transform.Translate(-escapeVector * Time.deltaTime * moveSpeed, Space.World);
+        return combinedThreatVector.normalized;
     }
 
     Vector3 CalculateAttractionVector()
     {
+        // Find the nearest collectible
         GameObject nearestCollectible = GetNearestCollectible();
 
+        // Calculate attraction vector towards the nearest collectible
         if (nearestCollectible != null)
         {
             Vector3 attractionVector = nearestCollectible.transform.position - transform.position;
             return attractionVector.normalized;
         }
 
+        // If no collectible is found, return zero vector
         return Vector3.zero;
     }
 
     GameObject GetNearestCollectible()
     {
+        // Find the nearest collectible
         GameObject nearestCollectible = null;
         float nearestDistance = float.MaxValue;
 
