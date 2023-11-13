@@ -45,7 +45,22 @@ public class HunterMovement : MonoBehaviour
         {
             if (rbOther.tag == "Prey")
             {
+                preys.Add(rbOther.gameObject);
+            }
+        }
+    }
 
+    private void OnTriggerExit(Collider other)
+    {
+        Rigidbody rbOther = other.GetComponent<Rigidbody>();
+        if (rbOther != null)
+        {
+            if (rbOther.tag == "Prey")
+            {
+                for (int i = 0; i < preys.Count; i++)
+                {
+                    preys.RemoveAt(i);
+                }
             }
         }
     }
