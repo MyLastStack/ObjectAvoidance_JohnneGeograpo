@@ -5,9 +5,10 @@ using UnityEngine;
 
 public class HunterMovement : MonoBehaviour
 {
-    [SerializeField] GameObject prey;
+    [SerializeField] List<GameObject> preys;
 
-    [SerializeField] float movementSpeed = 2.0f, forwardDist = 1.0f, sideDist = 3.0f;
+    [SerializeField] float movementSpeed = 7.0f, forwardDist = 1.0f, sideDist = 3.0f;
+    float rotateSpeed = 1000f;
 
     bool isLeft, isRight;
 
@@ -20,10 +21,21 @@ public class HunterMovement : MonoBehaviour
 
     void Update()
     {
+        Vector3 attractionVector = CalculateAttractionVector();
+
         AvoidWalls();
 
-        transform.LookAt(prey.transform.position);
-        transform.Translate(Vector3.forward * Time.deltaTime * movementSpeed);
+        if (attractionVector != Vector3.zero)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(attractionVector, transform.up);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * rotateSpeed);
+
+            transform.Translate(attractionVector.normalized * Time.deltaTime * movementSpeed, Space.World);
+        }
+        else
+        {
+            transform.Translate(Vector3.forward * Time.deltaTime * movementSpeed);
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -76,5 +88,37 @@ public class HunterMovement : MonoBehaviour
                 }
             }
         }
+    }
+
+    Vector3 CalculateAttractionVector()
+    {
+        GameObject nearestPrey = GetNearestPrey();
+
+        if (nearestPrey != null)
+        {
+            Vector3 attractionVector = nearestPrey.transform.position - transform.position;
+            return attractionVector.normalized;
+        }
+
+        return Vector3.zero;
+    }
+
+    GameObject GetNearestPrey()
+    {
+        GameObject nearestPU = null;
+        float nearestDistance = float.MaxValue;
+
+        foreach (GameObject prey in preys)
+        {
+            float distance = Vector3.Distance(transform.position, prey.transform.position);
+
+            if (distance < nearestDistance)
+            {
+                nearestDistance = distance;
+                nearestPU = prey;
+            }
+        }
+
+        return nearestPU;
     }
 }
