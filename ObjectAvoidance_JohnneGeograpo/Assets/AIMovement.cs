@@ -100,6 +100,10 @@ public class AIMovement : MonoBehaviour
             {
                 powerups.Add(other.gameObject);
             }
+            if (rb.tag == "Collectable")
+            {
+                collectables.Add(other.gameObject);
+            }
         }
     }
 
