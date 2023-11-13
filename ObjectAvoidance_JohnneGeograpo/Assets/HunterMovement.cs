@@ -165,7 +165,7 @@ public class HunterMovement : MonoBehaviour
 
         if (Physics.Raycast(transform.position, direction, out hit, 5.0f))
         {
-            if (hit.transform.CompareTag("Prey"))
+            if (hit.transform.CompareTag("Prey") && !hit.transform.GetComponent<AIMovement>().invis)
             {
                 return true;
             }

@@ -21,6 +21,8 @@ public class AIMovement : MonoBehaviour
     float rotateSpeed = 1000f;
     float buffUptime = 3.0f;
 
+    public bool invis = false;
+
     void Start()
     {
 
@@ -71,7 +73,9 @@ public class AIMovement : MonoBehaviour
             }
             else if (collision.gameObject.name == "Invisible")
             {
-
+                invis = true;
+                collision.gameObject.SetActive(false);
+                InvisCloak();
             }
         }
     }
@@ -258,5 +262,10 @@ public class AIMovement : MonoBehaviour
     {
         yield return new WaitForSeconds(buffUptime);
         moveSpeed = 7.0f;
+    }
+    IEnumerator InvisCloak()
+    {
+        yield return new WaitForSeconds(buffUptime);
+        invis = false;
     }
 }
