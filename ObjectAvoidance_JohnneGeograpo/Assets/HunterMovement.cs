@@ -7,7 +7,7 @@ public class HunterMovement : MonoBehaviour
 {
     [SerializeField] List<GameObject> preys;
 
-    [SerializeField] float movementSpeed = 15.0f, forwardDist = 1.0f, sideDist = 3.0f;
+    [SerializeField] float movementSpeed = 30.0f, forwardDist = 1.0f, sideDist = 3.0f;
     float rotateSpeed = 1000f;
 
     bool isLeft, isRight;
