@@ -40,22 +40,22 @@ public class HunterMovement : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Rigidbody rbOther = other.GetComponent<Rigidbody>();
-        if (rbOther != null)
+        Rigidbody rb = other.GetComponent<Rigidbody>();
+        if (rb != null)
         {
-            if (rbOther.tag == "Prey")
+            if (rb.tag == "Prey")
             {
-                preys.Add(rbOther.gameObject);
+                preys.Add(rb.gameObject);
             }
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        Rigidbody rbOther = other.GetComponent<Rigidbody>();
-        if (rbOther != null)
+        Rigidbody rb = other.GetComponent<Rigidbody>();
+        if (rb != null)
         {
-            if (rbOther.tag == "Prey")
+            if (rb.tag == "Prey")
             {
                 for (int i = 0; i < preys.Count; i++)
                 {
