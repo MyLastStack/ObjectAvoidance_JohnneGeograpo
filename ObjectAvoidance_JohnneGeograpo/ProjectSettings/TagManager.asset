@@ -8,6 +8,8 @@ TagManager:
   - Prey
   - Wall
   - PowerUp
+  - Invisible
+  - SpeedBoost
   layers:
   - Default
   - TransparentFX

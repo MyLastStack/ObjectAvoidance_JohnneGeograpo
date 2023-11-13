@@ -65,17 +65,20 @@ public class AIMovement : MonoBehaviour
         }
         if (collision.gameObject.tag == "PowerUps")
         {
-            if (collision.gameObject.name == "SpeedBoost")
+            foreach (Transform child in collision.transform)
             {
-                moveSpeed = 12.0f;
-                collision.gameObject.SetActive(false);
-                SpeedBoosting();
-            }
-            else if (collision.gameObject.name == "Invisible")
-            {
-                invis = true;
-                collision.gameObject.SetActive(false);
-                InvisCloak();
+                if (child.CompareTag("SpeedBoost"))
+                {
+                    moveSpeed = 12.0f;
+                    collision.gameObject.SetActive(false);
+                    SpeedBoosting();
+                }
+                if (child.CompareTag("Invisibile"))
+                {
+                    invis = true;
+                    collision.gameObject.SetActive(false);
+                    InvisCloak();
+                }
             }
         }
     }
