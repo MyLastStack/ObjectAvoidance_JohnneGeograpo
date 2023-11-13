@@ -41,12 +41,9 @@ public class HunterMovement : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         Rigidbody rbOther = other.GetComponent<Rigidbody>();
-        if (rbOther != null)
+        if (rbOther.tag == "Prey")
         {
-            if (rbOther.tag == "Prey")
-            {
-                preys.Add(rbOther.gameObject);
-            }
+            preys.Add(rbOther.gameObject);
         }
     }
 
