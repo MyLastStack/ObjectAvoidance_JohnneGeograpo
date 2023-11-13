@@ -137,7 +137,7 @@ GameObject:
   - component: {fileID: 95977981}
   m_Layer: 6
   m_Name: CubeModel
-  m_TagString: Untagged
+  m_TagString: Prey
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1462,7 +1462,7 @@ Transform:
   m_GameObject: {fileID: 673814607}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -19.57, y: 1, z: -18.09}
+  m_LocalPosition: {x: -13, y: 1, z: 10.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1509,7 +1509,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3150161188d0cfe44b9adefbebf96028, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prey: {fileID: 1752239101}
+  preys: []
   movementSpeed: 3
   forwardDist: 1
   sideDist: 3
