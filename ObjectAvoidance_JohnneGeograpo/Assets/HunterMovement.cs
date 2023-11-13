@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class HunterMovement : MonoBehaviour
 {
-    [SerializeField] List<GameObject> preys;
+    public List<GameObject> preys;
 
     [SerializeField] float movementSpeed = 7.0f, forwardDist = 1.0f, sideDist = 3.0f;
     float rotateSpeed = 1000f;
@@ -45,11 +45,7 @@ public class HunterMovement : MonoBehaviour
     {
         if (collision.gameObject.tag == "Prey")
         {
-            for (int i = 0; i < preys.Count; i++)
-            {
-                preys.RemoveAt(i);
-                hasTriggered = false;
-            }
+            hasTriggered = false;
         }
     }
     #endregion

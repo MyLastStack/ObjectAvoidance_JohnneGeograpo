@@ -17,15 +17,20 @@ public class AIMovement : MonoBehaviour
     RaycastHit hit;
 
     Vector3 finalVector;
-    float moveSpeed = 7.0f;
+    public float moveSpeed = 7.0f;
     float rotateSpeed = 1000f;
     float buffUptime = 3.0f;
 
     public bool invis = false;
 
+    public Material mainMat;
+    public Material invisMat;
+    MeshRenderer player;
+
     void Start()
     {
-
+        player = GetComponentInChildren<MeshRenderer>();
+        player.material = mainMat;
     }
 
     void Update()
@@ -61,6 +66,10 @@ public class AIMovement : MonoBehaviour
     {
         if (collision.gameObject.tag == "Hunter")
         {
+            for (int i = 0; i < hunters.Count; i++)
+            {
+                hunters[i].GetComponent<HunterMovement>().preys.Clear();
+            }
             gameObject.SetActive(false);
         }
         if (collision.gameObject.tag == "PowerUp")
@@ -76,6 +85,7 @@ public class AIMovement : MonoBehaviour
                 if (child.CompareTag("Invisible"))
                 {
                     invis = true;
+                    player.material = invisMat;
                     collision.gameObject.SetActive(false);
                     StartCoroutine(InvisCloak());
                 }
@@ -98,11 +108,17 @@ public class AIMovement : MonoBehaviour
             }
             if (rb.tag == "PowerUp")
             {
-                powerups.Add(other.gameObject);
+                if (LineOfSight(other.transform))
+                {
+                    powerups.Add(other.gameObject);
+                }
             }
             if (rb.tag == "Collectable")
             {
-                collectables.Add(other.gameObject);
+                if (LineOfSight(other.transform))
+                {
+                    collectables.Add(other.gameObject);
+                }
             }
         }
     }
@@ -265,6 +281,21 @@ public class AIMovement : MonoBehaviour
 
         return nearestPU;
     }
+    bool LineOfSight(Transform target)
+    {
+        RaycastHit hit;
+        Vector3 direction = target.position - transform.position;
+
+        if (Physics.Raycast(transform.position, direction, out hit, 5.0f))
+        {
+            if (hit.transform.CompareTag("PowerUp") || hit.transform.CompareTag("Collectable"))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     IEnumerator SpeedBoosting()
     {
@@ -275,5 +306,6 @@ public class AIMovement : MonoBehaviour
     {
         yield return new WaitForSeconds(buffUptime);
         invis = false;
+        player.material = mainMat;
     }
 }
