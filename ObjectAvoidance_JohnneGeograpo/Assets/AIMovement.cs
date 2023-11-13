@@ -12,7 +12,7 @@ public class AIMovement : MonoBehaviour
     [SerializeField] List<GameObject> powerups;
     [SerializeField] List<GameObject> collectables;
     [SerializeField] GameObject target;
-
+    
     bool isLeft, isRight;
     RaycastHit hit;
 
@@ -63,7 +63,7 @@ public class AIMovement : MonoBehaviour
         {
             gameObject.SetActive(false);
         }
-        if (collision.gameObject.tag == "PowerUps")
+        if (collision.gameObject.tag == "PowerUp")
         {
             foreach (Transform child in collision.transform)
             {
@@ -71,14 +71,15 @@ public class AIMovement : MonoBehaviour
                 {
                     moveSpeed = 12.0f;
                     collision.gameObject.SetActive(false);
-                    SpeedBoosting();
+                    StartCoroutine(SpeedBoosting());
                 }
-                if (child.CompareTag("Invisibile"))
+                if (child.CompareTag("Invisible"))
                 {
                     invis = true;
                     collision.gameObject.SetActive(false);
-                    InvisCloak();
+                    StartCoroutine(InvisCloak());
                 }
+                powerups.Clear();
             }
         }
     }
@@ -118,7 +119,7 @@ public class AIMovement : MonoBehaviour
                     }
                 }
             }
-            if (rb.tag == "Collectible")
+            if (rb.tag == "Collectable")
             {
                 for (int i = 0; i < powerups.Count; i++)
                 {
