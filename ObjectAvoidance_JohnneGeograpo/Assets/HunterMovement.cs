@@ -20,14 +20,29 @@ public class HunterMovement : MonoBehaviour
 
     void Update()
     {
+        AvoidWalls();
+
         transform.LookAt(prey.transform.position);
         transform.Translate(Vector3.forward * Time.deltaTime * movementSpeed);
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Rigidbody rbOther = other.GetComponent<Rigidbody>();
+        if (rbOther != null)
+        {
+            if (rbOther.tag == "Prey")
+            {
+
+            }
+        }
+    }
+
     void AvoidWalls()
     {
         if (Physics.BoxCast(transform.position, new Vector3(0.5f, 0.5f, 0.5f), transform.forward, out hit, Quaternion.identity, forwardDist))
         {
-            if (hit.transform.gameObject.tag == "Wall")
+            if (hit.transform.gameObject.tag == "Wall" || hit.transform.gameObject.tag == "Hunter")
             {
 
                 // Rotate based on what is to the sides

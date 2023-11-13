@@ -112,7 +112,7 @@ public class AIMovement : MonoBehaviour
     {
         if (Physics.BoxCast(transform.position, new Vector3(0.5f, 0.5f, 0.5f), transform.forward, out hit, Quaternion.identity, forwardDist))
         {
-            if (hit.transform.gameObject.tag == "Wall")
+            if (hit.transform.gameObject.tag == "Wall" || hit.transform.gameObject.tag == "Prey")
             {
 
                 // Rotate based on what is to the sides

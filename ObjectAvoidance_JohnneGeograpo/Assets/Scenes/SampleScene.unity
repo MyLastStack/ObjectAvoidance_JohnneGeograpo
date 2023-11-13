@@ -1448,7 +1448,7 @@ GameObject:
   - component: {fileID: 673814610}
   m_Layer: 0
   m_Name: Hunter
-  m_TagString: Untagged
+  m_TagString: Hunter
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2721,7 +2721,7 @@ GameObject:
   - component: {fileID: 1752239104}
   m_Layer: 6
   m_Name: AICubes
-  m_TagString: Wall
+  m_TagString: Prey
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
