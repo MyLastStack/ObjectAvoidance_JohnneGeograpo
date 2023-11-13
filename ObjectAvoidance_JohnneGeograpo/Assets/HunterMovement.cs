@@ -14,6 +14,8 @@ public class HunterMovement : MonoBehaviour
 
     RaycastHit hit;
 
+    public bool hasTriggered = false;
+
     void Start()
     {
         
@@ -41,9 +43,13 @@ public class HunterMovement : MonoBehaviour
     #region OnCollision
     private void OnCollisionEnter(Collision collision)
     {
-        for (int i = 0; i < preys.Count; i++)
+        if (collision.gameObject.tag == "Prey")
         {
-            preys.RemoveAt(i);
+            for (int i = 0; i < preys.Count; i++)
+            {
+                preys.RemoveAt(i);
+                hasTriggered = false;
+            }
         }
     }
     #endregion
@@ -55,7 +61,11 @@ public class HunterMovement : MonoBehaviour
         {
             if (LineOfSight(other.transform))
             {
-                preys.Add(other.gameObject);
+                if (!hasTriggered)
+                {
+                    preys.Add(other.gameObject);
+                    hasTriggered = true;
+                }
             }
         }
     }
@@ -69,6 +79,7 @@ public class HunterMovement : MonoBehaviour
                 for (int i = 0; i < preys.Count; i++)
                 {
                     preys.RemoveAt(i);
+                    hasTriggered = false;
                 }
             }
         }

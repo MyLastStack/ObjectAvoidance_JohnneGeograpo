@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class AIMovement : MonoBehaviour
 {
@@ -9,7 +10,8 @@ public class AIMovement : MonoBehaviour
 
     [SerializeField] List<GameObject> hunters;
     [SerializeField] List<GameObject> powerups;
-    [SerializeField] List<GameObject> collectible;
+    [SerializeField] List<GameObject> collectables;
+    [SerializeField] GameObject target;
 
     bool isLeft, isRight;
     RaycastHit hit;
@@ -17,6 +19,7 @@ public class AIMovement : MonoBehaviour
     Vector3 finalVector;
     float moveSpeed = 7.0f;
     float rotateSpeed = 1000f;
+    float buffUptime = 3.0f;
 
     void Start()
     {
@@ -27,6 +30,7 @@ public class AIMovement : MonoBehaviour
     {
         Vector3 attractionVector = CalculateAttractionVector();
 
+        CheckTargets();
         AvoidWalls();
 
         if (attractionVector != Vector3.zero)
@@ -56,6 +60,19 @@ public class AIMovement : MonoBehaviour
         if (collision.gameObject.tag == "Hunter")
         {
             gameObject.SetActive(false);
+        }
+        if (collision.gameObject.tag == "PowerUps")
+        {
+            if (collision.gameObject.name == "SpeedBoost")
+            {
+                moveSpeed = 12.0f;
+                collision.gameObject.SetActive(false);
+                SpeedBoosting();
+            }
+            else if (collision.gameObject.name == "Invisible")
+            {
+
+            }
         }
     }
     #endregion
@@ -147,6 +164,50 @@ public class AIMovement : MonoBehaviour
             }
         }
     }
+    void CheckTargets()
+    {
+        float distance = 10000.0f;
+
+        for (int i = 0; i < collectables.Count; i++)
+        {
+            if (Vector3.Distance(transform.position, collectables[i].transform.position) < distance)
+            {
+                distance = Vector3.Distance(transform.position, collectables[i].transform.position);
+                target = collectables[i];
+            }
+        }
+
+        if (target != null)
+        {
+            if (target.gameObject.activeSelf)
+            {
+                if (Physics.BoxCast(transform.position, new Vector3(0.5f, 0.5f, 0.5f), target.transform.position - transform.position, out hit, Quaternion.identity))
+                {
+                    if (hit.transform.tag != "Wall" || hit.transform.tag != "Prey")
+                    {
+                        transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(transform.forward, target.transform.position - transform.position, 1, 1));
+                    }
+
+                    if (Vector3.Distance(target.transform.position, transform.position) < 2.0f)
+                    {
+                        target.SetActive(false);
+                        target = null;
+                        for (int i = 0; i < collectables.Count; i++)
+                        {
+                            if (target == collectables[i])
+                            {
+                                collectables.RemoveAt(i);
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                target = null;
+            }
+        }
+    }
 
     Vector3 CalculateCombinedThreatVector()
     {
@@ -191,5 +252,11 @@ public class AIMovement : MonoBehaviour
         }
 
         return nearestPU;
+    }
+
+    IEnumerator SpeedBoosting()
+    {
+        yield return new WaitForSeconds(buffUptime);
+        moveSpeed = 7.0f;
     }
 }
