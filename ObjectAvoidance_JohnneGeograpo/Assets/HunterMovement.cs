@@ -7,7 +7,7 @@ public class HunterMovement : MonoBehaviour
 {
     [SerializeField] List<GameObject> preys;
 
-    [SerializeField] float movementSpeed = 30.0f, forwardDist = 1.0f, sideDist = 3.0f;
+    [SerializeField] float movementSpeed = 7.0f, forwardDist = 1.0f, sideDist = 3.0f;
     float rotateSpeed = 1000f;
 
     bool isLeft, isRight;
@@ -30,11 +30,11 @@ public class HunterMovement : MonoBehaviour
             Quaternion targetRotation = Quaternion.LookRotation(attractionVector, transform.up);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * rotateSpeed);
 
-            transform.Translate(attractionVector.normalized * Time.deltaTime * movementSpeed, Space.World);
+            transform.Translate(attractionVector.normalized * Time.deltaTime * movementSpeed * 2.5f, Space.World);
         }
         else
         {
-            transform.Translate(Vector3.forward * Time.deltaTime * movementSpeed);
+            transform.Translate(Vector3.forward * Time.deltaTime * movementSpeed * 2.5f);
         }
     }
 

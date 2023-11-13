@@ -1462,7 +1462,7 @@ Transform:
   m_GameObject: {fileID: 673814607}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -13, y: 1, z: 10.6}
+  m_LocalPosition: {x: -14.21, y: 1, z: -3.92}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1509,7 +1509,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3150161188d0cfe44b9adefbebf96028, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  preys: []
+  preys:
+  - {fileID: 1752239101}
   movementSpeed: 3
   forwardDist: 1
   sideDist: 3
@@ -2784,7 +2785,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   forwardDist: 1
   sideDist: 3
-  hunters: []
+  hunters:
+  - {fileID: 673814607}
   powerups: []
   collectible: []
 --- !u!1 &1935419089
