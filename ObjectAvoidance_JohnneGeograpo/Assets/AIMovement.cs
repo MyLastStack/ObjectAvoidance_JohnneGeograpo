@@ -15,7 +15,7 @@ public class AIMovement : MonoBehaviour
     RaycastHit hit;
 
     Vector3 finalVector;
-    float moveSpeed = 2f;
+    float moveSpeed = 2.0f;
     float rotateSpeed = 1000f;
 
     void Start()
