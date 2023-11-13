@@ -38,18 +38,27 @@ public class HunterMovement : MonoBehaviour
         }
     }
 
+    #region OnCollision
+    private void OnCollisionEnter(Collision collision)
+    {
+        for (int i = 0; i < preys.Count; i++)
+        {
+            preys.RemoveAt(i);
+        }
+    }
+    #endregion
+
+    #region OnTrigger
     private void OnTriggerEnter(Collider other)
     {
-        Rigidbody rb = other.GetComponent<Rigidbody>();
-        if (rb != null)
+        if (other.CompareTag("Prey"))
         {
-            if (rb.tag == "Prey")
+            if (LineOfSight(other.transform))
             {
-                preys.Add(rb.gameObject);
+                preys.Add(other.gameObject);
             }
         }
     }
-
     private void OnTriggerExit(Collider other)
     {
         Rigidbody rb = other.GetComponent<Rigidbody>();
@@ -64,6 +73,7 @@ public class HunterMovement : MonoBehaviour
             }
         }
     }
+    #endregion
 
     void AvoidWalls()
     {
@@ -135,5 +145,21 @@ public class HunterMovement : MonoBehaviour
         }
 
         return nearestPU;
+    }
+
+    bool LineOfSight(Transform target)
+    {
+        RaycastHit hit;
+        Vector3 direction = target.position - transform.position;
+
+        if (Physics.Raycast(transform.position, direction, out hit, 5.0f))
+        {
+            if (hit.transform.CompareTag("Prey"))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
